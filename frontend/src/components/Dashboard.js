@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { agribotApi } from '../services/agribotApi';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Input } from './ui/input';
+import { ScrollArea } from './ui/scroll-area';
+import { Alert, AlertDescription } from './ui/alert';
 import { 
   Leaf, 
   LogOut, 
@@ -14,7 +18,10 @@ import {
   TrendingUp,
   MessageCircle,
   MapPin,
-  BarChart3
+  BarChart3,
+  RefreshCw,
+  Send,
+  Loader2
 } from 'lucide-react';
 
 const Dashboard = () => {
