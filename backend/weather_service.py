@@ -9,7 +9,7 @@ class WeatherService:
         self.api_key = os.environ.get('1f2d42669416a4241a0ff6201f850859t')
         self.base_url = "http://api.openweathermap.org/data/2.5"
     
-    def get_weather_forecast(self, city: str = "Delhi") -> List[Dict]:
+    def get_weather_forecast(self, city: str = "Mumbai") -> List[Dict]:
         """Get 5-day weather forecast for a city"""
         if not self.api_key:
             return self._get_mock_forecast()
