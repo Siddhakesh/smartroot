@@ -361,22 +361,19 @@ const Dashboard = () => {
                 <CardContent>
                   <p className="text-gray-600 mb-4">5-day forecast for Delhi</p>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Today</span>
-                      <span className="text-sm font-medium">28°C, Sunny</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Tomorrow</span>
-                      <span className="text-sm font-medium">26°C, Cloudy</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Day 3</span>
-                      <span className="text-sm font-medium">24°C, Rain</span>
-                    </div>
+                    {weatherData.slice(0, 3).map((day, index) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <span className="text-sm">{day.day}</span>
+                        <span className="text-sm font-medium">{day.temp}°C, {day.description}</span>
+                      </div>
+                    ))}
                   </div>
-                  <Button variant="outline" className="w-full mt-4">
-                    View Detailed Forecast
-                  </Button>
+                  {weatherRecommendations && (
+                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                      <p className="text-xs font-medium text-blue-800 mb-1">AI Recommendations:</p>
+                      <p className="text-xs text-blue-700 line-clamp-3">{weatherRecommendations.slice(0, 120)}...</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
