@@ -57,6 +57,61 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+# Authentication endpoints
+@api_router.post("/auth/signup", response_model=Token)
+async def signup(user_data: UserCreate):
+    try:
+        user = await create_user(db, user_data)
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.email}, expires_delta=access_token_expires
+        )
+        return Token(
+            access_token=access_token,
+            token_type="bearer",
+            user=user
+        )
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error creating user: {str(e)}"
+        )
+
+@api_router.post("/auth/login", response_model=Token)
+async def login(user_credentials: UserLogin):
+    user = await authenticate_user(db, user_credentials.email, user_credentials.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user["email"]}, expires_delta=access_token_expires
+    )
+    
+    # Create User object without password
+    user_obj = User(
+        id=user["id"],
+        name=user["name"],
+        email=user["email"],
+        created_at=user["created_at"],
+        is_active=user["is_active"]
+    )
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        user=user_obj
+    )
+
+@api_router.get("/auth/me", response_model=User)
+async def get_current_user_info(current_user: User = Depends(get_current_user)):
+    return current_user
+
 # Include the router in the main app
 app.include_router(api_router)
 
