@@ -14,6 +14,12 @@ from auth import (
     authenticate_user, create_user, get_current_user,
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
+from ml_service import (
+    crop_model, yield_model, simulate_sensor_data, 
+    simulate_farm_data, generate_market_data
+)
+from weather_service import weather_service
+from ai_service import gemini_service
 
 
 ROOT_DIR = Path(__file__).parent
