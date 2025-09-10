@@ -26,19 +26,145 @@ import {
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  
+  // State management
+  const [sensorData, setSensorData] = useState(null);
+  const [recommendedCrop, setRecommendedCrop] = useState("");
+  const [weatherData, setWeatherData] = useState([]);
+  const [weatherRecommendations, setWeatherRecommendations] = useState("");
+  const [yieldData, setYieldData] = useState(null);
+  const [marketData, setMarketData] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState("");
+  const [loading, setLoading] = useState({
+    dashboard: true,
+    weather: false,
+    chat: false,
+    yield: false,
+    market: false,
+    refresh: false
+  });
+  const [error, setError] = useState("");
 
-  // Mock data for now - will be replaced with real data from ML models
-  const sensorData = {
-    temperature: 28.5,
-    humidity: 65,
-    ph: 6.8,
-    rainfall: 45,
-    nitrogen: 85,
-    phosphorus: 60,
-    potassium: 90
+  // Load initial data
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      setLoading(prev => ({ ...prev, dashboard: true }));
+      
+      // Load sensor data and crop recommendation
+      const sensorResponse = await agribotApi.getSensorData();
+      setSensorData(sensorResponse.sensor_data);
+      setRecommendedCrop(sensorResponse.recommended_crop);
+      
+      // Load weather data
+      const weatherResponse = await agribotApi.getWeatherForecast();
+      setWeatherData(weatherResponse.forecast);
+      
+      // Get weather recommendations
+      if (weatherResponse.forecast.length > 0) {
+        const recResponse = await agribotApi.getWeatherRecommendations(
+          weatherResponse.forecast, 
+          sensorResponse.recommended_crop
+        );
+        setWeatherRecommendations(recResponse.recommendations);
+      }
+      
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      setError('Failed to load dashboard data. Please try again.');
+    } finally {
+      setLoading(prev => ({ ...prev, dashboard: false }));
+    }
   };
 
-  const recommendedCrop = "Rice";
+  const handleRefreshData = async () => {
+    try {
+      setLoading(prev => ({ ...prev, refresh: true }));
+      const response = await agribotApi.refreshSensorData();
+      setSensorData(response.sensor_data);
+      setRecommendedCrop(response.recommended_crop);
+      
+      // Refresh weather recommendations with new crop
+      if (weatherData.length > 0) {
+        const recResponse = await agribotApi.getWeatherRecommendations(
+          weatherData, 
+          response.recommended_crop
+        );
+        setWeatherRecommendations(recResponse.recommendations);
+      }
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+      setError('Failed to refresh data. Please try again.');
+    } finally {
+      setLoading(prev => ({ ...prev, refresh: false }));
+    }
+  };
+
+  const loadYieldData = async () => {
+    try {
+      setLoading(prev => ({ ...prev, yield: true }));
+      const response = await agribotApi.getYieldPrediction();
+      setYieldData(response);
+    } catch (error) {
+      console.error('Error loading yield data:', error);
+    } finally {
+      setLoading(prev => ({ ...prev, yield: false }));
+    }
+  };
+
+  const loadMarketData = async () => {
+    try {
+      setLoading(prev => ({ ...prev, market: true }));
+      const response = await agribotApi.getMarketRecommendations(recommendedCrop);
+      setMarketData(response.markets);
+    } catch (error) {
+      console.error('Error loading market data:', error);
+    } finally {
+      setLoading(prev => ({ ...prev, market: false }));
+    }
+  };
+
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const userMessage = { type: 'user', text: chatInput };
+    setChatMessages(prev => [...prev, userMessage]);
+    
+    try {
+      setLoading(prev => ({ ...prev, chat: true }));
+      const response = await agribotApi.chatWithAgriBot(
+        chatInput, 
+        recommendedCrop, 
+        sensorData
+      );
+      
+      const botMessage = { type: 'bot', text: response.response };
+      setChatMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error with chat:', error);
+      const errorMessage = { type: 'bot', text: 'Sorry, I encountered an error. Please try again.' };
+      setChatMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setLoading(prev => ({ ...prev, chat: false }));
+      setChatInput("");
+    }
+  };
+
+  if (loading.dashboard) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-green-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading your AgriBot dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
