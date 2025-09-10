@@ -531,7 +531,7 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="market">
+          <TabsContent value="market" onFocus={() => recommendedCrop && !marketData.length && loadMarketData()}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -539,11 +539,76 @@ const Dashboard = () => {
                   <span>Market Recommendations</span>
                 </CardTitle>
                 <CardDescription>
-                  Find the best markets for your crops
+                  Find the best markets for your {recommendedCrop} crop
                 </CardDescription>
               </CardHeader>
-              <CardContent className="min-h-[400px] flex items-center justify-center">
-                <p className="text-gray-500">Market recommendations will be implemented here</p>
+              <CardContent>
+                {loading.market ? (
+                  <div className="min-h-[400px] flex items-center justify-center">
+                    <div className="text-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-orange-600 mx-auto mb-4" />
+                      <p className="text-gray-600">Finding best markets...</p>
+                    </div>
+                  </div>
+                ) : marketData.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="text-center p-4 bg-orange-50 rounded-lg">
+                      <h3 className="text-xl font-bold text-orange-800 capitalize">
+                        Top Markets for {recommendedCrop}
+                      </h3>
+                      <p className="text-gray-600">Sorted by average price per quintal</p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      {marketData.map((market, index) => (
+                        <Card key={index} className="hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center space-x-3">
+                                <div className="bg-orange-100 p-2 rounded-full">
+                                  <MapPin className="h-4 w-4 text-orange-600" />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium text-gray-900">{market.Market}</h4>
+                                  <p className="text-sm text-gray-500">Agricultural Market</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-lg font-bold text-green-600">₹{market.AvgPrice}/quintal</p>
+                                <Badge variant="outline" className="mt-1">
+                                  Rank #{index + 1}
+                                </Badge>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                    
+                    <Button 
+                      onClick={loadMarketData}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Refresh Market Data
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="min-h-[400px] flex items-center justify-center">
+                    <div className="text-center">
+                      {recommendedCrop ? (
+                        <Button onClick={loadMarketData} className="bg-orange-600 hover:bg-orange-700">
+                          Load Market Data for {recommendedCrop}
+                        </Button>
+                      ) : (
+                        <p className="text-gray-500">
+                          Please wait for crop recommendation to load market data
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
