@@ -387,11 +387,70 @@ const Dashboard = () => {
                   <span>AI Chat Assistant</span>
                 </CardTitle>
                 <CardDescription>
-                  Ask questions about your crops and get AI-powered recommendations
+                  Ask questions about your crops ({recommendedCrop}) and get AI-powered recommendations
                 </CardDescription>
               </CardHeader>
-              <CardContent className="min-h-[400px] flex items-center justify-center">
-                <p className="text-gray-500">Chat interface will be implemented here</p>
+              <CardContent>
+                <div className="h-96 flex flex-col">
+                  <ScrollArea className="flex-1 mb-4 p-4 border rounded-lg bg-gray-50">
+                    {chatMessages.length === 0 ? (
+                      <div className="flex items-center justify-center h-full text-gray-500">
+                        <div className="text-center">
+                          <MessageCircle className="h-12 w-12 mx-auto mb-2 text-gray-400" />
+                          <p>Start a conversation with AgriBot!</p>
+                          <p className="text-sm">Ask about fertilizers, irrigation, pests, or anything farming-related.</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {chatMessages.map((message, index) => (
+                          <div
+                            key={index}
+                            className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div
+                              className={`max-w-[80%] p-3 rounded-lg ${
+                                message.type === 'user'
+                                  ? 'bg-green-600 text-white'
+                                  : 'bg-white border text-gray-800'
+                              }`}
+                            >
+                              <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                            </div>
+                          </div>
+                        ))}
+                        {loading.chat && (
+                          <div className="flex justify-start">
+                            <div className="bg-white border p-3 rounded-lg">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </ScrollArea>
+                  
+                  <form onSubmit={handleChatSubmit} className="flex space-x-2">
+                    <Input
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Ask AgriBot about your crops..."
+                      disabled={loading.chat}
+                      className="flex-1"
+                    />
+                    <Button 
+                      type="submit" 
+                      disabled={loading.chat || !chatInput.trim()}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      {loading.chat ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </form>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
