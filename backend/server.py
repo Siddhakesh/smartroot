@@ -118,6 +118,116 @@ async def login(user_credentials: UserLogin):
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     return current_user
 
+# AgriBot sensor data storage
+user_sensor_data = {}
+
+# AgriBot API endpoints
+@api_router.get("/agribot/sensor-data")
+async def get_sensor_data(current_user: User = Depends(get_current_user)):
+    """Get current sensor data for the user"""
+    user_id = current_user.id
+    
+    # Get or create sensor data for this user
+    if user_id not in user_sensor_data:
+        user_sensor_data[user_id] = simulate_sensor_data()
+    else:
+        # Simulate data drift from last reading
+        user_sensor_data[user_id] = simulate_sensor_data(user_sensor_data[user_id])
+    
+    sensor_data = user_sensor_data[user_id]
+    recommended_crop = crop_model.predict_crop(sensor_data)
+    
+    return {
+        "sensor_data": sensor_data,
+        "recommended_crop": recommended_crop,
+        "timestamp": datetime.utcnow()
+    }
+
+@api_router.post("/agribot/refresh-data")
+async def refresh_sensor_data(current_user: User = Depends(get_current_user)):
+    """Force refresh of sensor data"""
+    user_id = current_user.id
+    
+    # Update sensor data
+    if user_id in user_sensor_data:
+        user_sensor_data[user_id] = simulate_sensor_data(user_sensor_data[user_id])
+    else:
+        user_sensor_data[user_id] = simulate_sensor_data()
+    
+    sensor_data = user_sensor_data[user_id]
+    recommended_crop = crop_model.predict_crop(sensor_data)
+    
+    return {
+        "sensor_data": sensor_data,
+        "recommended_crop": recommended_crop,
+        "timestamp": datetime.utcnow()
+    }
+
+@api_router.get("/agribot/weather")
+async def get_weather_forecast(city: str = "Delhi", current_user: User = Depends(get_current_user)):
+    """Get weather forecast for a city"""
+    forecast = weather_service.get_weather_forecast(city)
+    return {"forecast": forecast, "city": city}
+
+@api_router.post("/agribot/weather-recommendations")
+async def get_weather_recommendations(
+    request: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Get AI recommendations based on weather and crop"""
+    forecast = request.get("forecast", [])
+    crop = request.get("crop", "rice")
+    
+    recommendations = gemini_service.get_weather_recommendations(forecast, crop)
+    return {"recommendations": recommendations}
+
+class ChatRequest(BaseModel):
+    question: str
+    crop: str = "rice"
+    sensor_data: dict = {}
+
+@api_router.post("/agribot/chat")
+async def chat_with_agribot(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user)
+):
+    """Chat with AgriBot AI assistant"""
+    user_id = current_user.id
+    
+    # Use current sensor data if available
+    if user_id in user_sensor_data:
+        sensor_data = user_sensor_data[user_id]
+    else:
+        sensor_data = request.sensor_data or simulate_sensor_data()
+    
+    response = gemini_service.ask_agribot(request.question, request.crop, sensor_data)
+    return {"response": response}
+
+@api_router.get("/agribot/yield-prediction")
+async def get_yield_prediction(current_user: User = Depends(get_current_user)):
+    """Get yield prediction based on farm data"""
+    farm_data = simulate_farm_data()
+    predicted_yield = yield_model.predict_yield(farm_data)
+    
+    return {
+        "farm_data": farm_data,
+        "predicted_yield": predicted_yield,
+        "timestamp": datetime.utcnow()
+    }
+
+@api_router.get("/agribot/market-recommendations")
+async def get_market_recommendations(
+    crop: str = "rice",
+    current_user: User = Depends(get_current_user)
+):
+    """Get market recommendations for a crop"""
+    markets = generate_market_data(crop)
+    return {
+        "crop": crop,
+        "markets": markets,
+        "timestamp": datetime.utcnow()
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
