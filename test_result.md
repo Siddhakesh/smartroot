@@ -101,3 +101,121 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Convert Tkinter AgriBot desktop application to web application with FastAPI backend and React frontend. Features include crop recommendation using ML models, yield prediction, market recommendations, weather forecasting, and AI chat functionality using Gemini API. Need to add login/signup authentication system."
+
+backend:
+  - task: "User Authentication System"
+    implemented: false
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Starting implementation of JWT-based authentication with login/signup endpoints"
+
+  - task: "ML Models Integration"
+    implemented: false
+    working: "NA"
+    file: "ml_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Need to get .pkl model files and CSV dataset from user's Tkinter app"
+
+  - task: "Crop Recommendation API"
+    implemented: false
+    working: "NA"
+    file: "crop_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Will implement after ML models are available"
+
+  - task: "Weather API Integration"
+    implemented: false
+    working: "NA"
+    file: "weather_service.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Need user's OpenWeather API key"
+
+  - task: "Gemini AI Chat Integration"
+    implemented: false
+    working: "NA"
+    file: "ai_service.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Need user's Gemini API key"
+
+frontend:
+  - task: "Login/Signup Pages"
+    implemented: false
+    working: "NA"
+    file: "Login.js, Signup.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Starting with authentication UI components"
+
+  - task: "Dashboard Layout"
+    implemented: false
+    working: "NA"
+    file: "Dashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Will implement after authentication is done"
+
+  - task: "AgriBot Chat Interface"
+    implemented: false
+    working: "NA"
+    file: "ChatBot.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+          agent: "main"
+          comment: "Chat UI for Gemini AI integration"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "User Authentication System"
+    - "Login/Signup Pages"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "main"
+      message: "Starting AgriBot web application conversion. Beginning with authentication system implementation. Need ML model files (.pkl) and CSV dataset from user's original Tkinter application."
