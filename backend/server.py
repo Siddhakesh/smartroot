@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,7 +8,12 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
+from auth import (
+    UserCreate, UserLogin, User, Token, create_access_token, 
+    authenticate_user, create_user, get_current_user,
+    ACCESS_TOKEN_EXPIRE_MINUTES
+)
 
 
 ROOT_DIR = Path(__file__).parent
