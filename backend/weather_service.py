@@ -6,7 +6,7 @@ from typing import List, Dict, Optional
 
 class WeatherService:
     def __init__(self):
-        self.api_key = os.environ.get('WEATHER_API_KEY')
+        self.api_key = os.environ.get('1f2d42669416a4241a0ff6201f850859t')
         self.base_url = "http://api.openweathermap.org/data/2.5"
     
     def get_weather_forecast(self, city: str = "Delhi") -> List[Dict]:
