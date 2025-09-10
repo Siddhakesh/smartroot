@@ -455,7 +455,7 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="yield">
+          <TabsContent value="yield" onFocus={() => !yieldData && loadYieldData()}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -466,8 +466,67 @@ const Dashboard = () => {
                   ML-powered yield predictions based on your farm data
                 </CardDescription>
               </CardHeader>
-              <CardContent className="min-h-[400px] flex items-center justify-center">
-                <p className="text-gray-500">Yield prediction interface will be implemented here</p>
+              <CardContent>
+                {loading.yield ? (
+                  <div className="min-h-[400px] flex items-center justify-center">
+                    <div className="text-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-green-600 mx-auto mb-4" />
+                      <p className="text-gray-600">Calculating yield predictions...</p>
+                    </div>
+                  </div>
+                ) : yieldData ? (
+                  <div className="space-y-6">
+                    <div className="text-center p-6 bg-green-50 rounded-lg">
+                      <h3 className="text-2xl font-bold text-green-800 mb-2">
+                        Predicted Yield: {yieldData.predicted_yield} tons
+                      </h3>
+                      <p className="text-gray-600">Based on current farm conditions</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-lg">Farm Parameters</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          {Object.entries(yieldData.farm_data).map(([key, value]) => (
+                            <div key={key} className="flex justify-between">
+                              <span className="text-sm text-gray-600">{key.replace(/[()]/g, '').replace(/_/g, ' ')}:</span>
+                              <span className="text-sm font-medium">{value}</span>
+                            </div>
+                          ))}
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-lg">Optimization Tips</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <p className="text-sm text-gray-600">• Consider upgrading to sprinkler irrigation for better yield</p>
+                          <p className="text-sm text-gray-600">• Optimal fertilizer application can increase yield by 15-20%</p>
+                          <p className="text-sm text-gray-600">• Soil type and season significantly impact final yield</p>
+                          <p className="text-sm text-gray-600">• Regular monitoring helps maintain optimal conditions</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                    
+                    <Button 
+                      onClick={loadYieldData}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Recalculate Prediction
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="min-h-[400px] flex items-center justify-center">
+                    <Button onClick={loadYieldData} className="bg-green-600 hover:bg-green-700">
+                      Load Yield Prediction
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
