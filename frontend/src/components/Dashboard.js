@@ -1,0 +1,281 @@
+import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { Button } from './ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { Badge } from './ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { 
+  Leaf, 
+  LogOut, 
+  Thermometer, 
+  Droplets, 
+  Cloud, 
+  TrendingUp,
+  MessageCircle,
+  MapPin,
+  BarChart3
+} from 'lucide-react';
+
+const Dashboard = () => {
+  const { user, logout } = useAuth();
+
+  // Mock data for now - will be replaced with real data from ML models
+  const sensorData = {
+    temperature: 28.5,
+    humidity: 65,
+    ph: 6.8,
+    rainfall: 45,
+    nitrogen: 85,
+    phosphorus: 60,
+    potassium: 90
+  };
+
+  const recommendedCrop = "Rice";
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <Leaf className="h-8 w-8 text-green-600" />
+              <h1 className="text-2xl font-bold text-green-800">AgriBot</h1>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Avatar>
+                  <AvatarFallback className="bg-green-100 text-green-800">
+                    {user?.name?.charAt(0) || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden sm:block">
+                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                </div>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={logout}
+                className="hover:bg-red-50 hover:text-red-700"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome back, {user?.name}! 🌱
+          </h2>
+          <p className="text-gray-600">
+            Here's your farm's latest insights and recommendations
+          </p>
+        </div>
+
+        <Tabs defaultValue="dashboard" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4 lg:w-400">
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="chat">AI Chat</TabsTrigger>
+            <TabsTrigger value="yield">Yield Prediction</TabsTrigger>
+            <TabsTrigger value="market">Market Info</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="dashboard" className="space-y-6">
+            {/* Current Conditions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Thermometer className="h-5 w-5 text-orange-500" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Temperature</p>
+                      <p className="text-2xl font-bold">{sensorData.temperature}°C</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Droplets className="h-5 w-5 text-blue-500" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Humidity</p>
+                      <p className="text-2xl font-bold">{sensorData.humidity}%</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Cloud className="h-5 w-5 text-gray-500" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">pH Level</p>
+                      <p className="text-2xl font-bold">{sensorData.ph}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <Cloud className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Rainfall</p>
+                      <p className="text-2xl font-bold">{sensorData.rainfall}mm</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* NPK Levels */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Soil Nutrients (NPK)</CardTitle>
+                <CardDescription>Current nitrogen, phosphorus, and potassium levels</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-600 mb-1">Nitrogen (N)</p>
+                    <p className="text-3xl font-bold text-green-600">{sensorData.nitrogen}</p>
+                    <Badge variant="secondary" className="mt-1">Good</Badge>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-600 mb-1">Phosphorus (P)</p>
+                    <p className="text-3xl font-bold text-orange-600">{sensorData.phosphorus}</p>
+                    <Badge variant="outline" className="mt-1">Moderate</Badge>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-600 mb-1">Potassium (K)</p>
+                    <p className="text-3xl font-bold text-blue-600">{sensorData.potassium}</p>
+                    <Badge variant="secondary" className="mt-1">Good</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Recommendations */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <TrendingUp className="h-5 w-5 text-green-600" />
+                    <span>Crop Recommendation</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-4">
+                    <p className="text-4xl font-bold text-green-700 mb-2">{recommendedCrop}</p>
+                    <p className="text-gray-600 mb-4">Best crop for current conditions</p>
+                    <Badge className="bg-green-100 text-green-800">92% Match</Badge>
+                  </div>
+                  <div className="space-y-2 mt-4">
+                    <p className="text-sm text-gray-600">🌱 Apply 35kg DAP fertilizer</p>
+                    <p className="text-sm text-gray-600">💧 Irrigate in 24 hours</p>
+                    <p className="text-sm text-gray-600">🌤️ Monitor weather conditions</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Cloud className="h-5 w-5 text-blue-600" />
+                    <span>Weather Forecast</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">5-day forecast for Delhi</p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Today</span>
+                      <span className="text-sm font-medium">28°C, Sunny</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Tomorrow</span>
+                      <span className="text-sm font-medium">26°C, Cloudy</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Day 3</span>
+                      <span className="text-sm font-medium">24°C, Rain</span>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4">
+                    View Detailed Forecast
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="chat">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <MessageCircle className="h-5 w-5 text-blue-600" />
+                  <span>AI Chat Assistant</span>
+                </CardTitle>
+                <CardDescription>
+                  Ask questions about your crops and get AI-powered recommendations
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="min-h-[400px] flex items-center justify-center">
+                <p className="text-gray-500">Chat interface will be implemented here</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="yield">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <BarChart3 className="h-5 w-5 text-green-600" />
+                  <span>Yield Prediction</span>
+                </CardTitle>
+                <CardDescription>
+                  ML-powered yield predictions based on your farm data
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="min-h-[400px] flex items-center justify-center">
+                <p className="text-gray-500">Yield prediction interface will be implemented here</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="market">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <MapPin className="h-5 w-5 text-orange-600" />
+                  <span>Market Recommendations</span>
+                </CardTitle>
+                <CardDescription>
+                  Find the best markets for your crops
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="min-h-[400px] flex items-center justify-center">
+                <p className="text-gray-500">Market recommendations will be implemented here</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
