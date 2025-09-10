@@ -339,14 +339,14 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-center py-4">
-                    <p className="text-4xl font-bold text-green-700 mb-2">{recommendedCrop}</p>
+                    <p className="text-4xl font-bold text-green-700 mb-2 capitalize">{recommendedCrop || 'Loading...'}</p>
                     <p className="text-gray-600 mb-4">Best crop for current conditions</p>
-                    <Badge className="bg-green-100 text-green-800">92% Match</Badge>
+                    <Badge className="bg-green-100 text-green-800">AI Recommended</Badge>
                   </div>
                   <div className="space-y-2 mt-4">
-                    <p className="text-sm text-gray-600">🌱 Apply 35kg DAP fertilizer</p>
-                    <p className="text-sm text-gray-600">💧 Irrigate in 24 hours</p>
-                    <p className="text-sm text-gray-600">🌤️ Monitor weather conditions</p>
+                    <p className="text-sm text-gray-600">🌱 Based on current NPK levels</p>
+                    <p className="text-sm text-gray-600">💧 Consider soil moisture</p>
+                    <p className="text-sm text-gray-600">🌤️ Weather-optimized selection</p>
                   </div>
                 </CardContent>
               </Card>
