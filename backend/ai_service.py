@@ -5,7 +5,7 @@ from typing import Dict, Optional
 
 class GeminiAIService:
     def __init__(self):
-        self.api_key = os.environ.get('GEMINI_API_KEY')
+        self.api_key = os.environ.get('AIzaSyB8hyuiep_fKqPp8x1Bex0hdVsYBswNbkQ')
         self.base_url = "https://generativelanguage.googleapis.com/v1beta/models"
     
     def ask_agribot(self, question: str, crop: str, sensor_data: Dict) -> str:
