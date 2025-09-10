@@ -305,18 +305,24 @@ const Dashboard = () => {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <p className="text-sm font-medium text-gray-600 mb-1">Nitrogen (N)</p>
-                    <p className="text-3xl font-bold text-green-600">{sensorData.nitrogen}</p>
-                    <Badge variant="secondary" className="mt-1">Good</Badge>
+                    <p className="text-3xl font-bold text-green-600">{sensorData?.N || 'N/A'}</p>
+                    <Badge variant="secondary" className="mt-1">
+                      {sensorData?.N > 80 ? 'Good' : sensorData?.N > 50 ? 'Moderate' : 'Low'}
+                    </Badge>
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-medium text-gray-600 mb-1">Phosphorus (P)</p>
-                    <p className="text-3xl font-bold text-orange-600">{sensorData.phosphorus}</p>
-                    <Badge variant="outline" className="mt-1">Moderate</Badge>
+                    <p className="text-3xl font-bold text-orange-600">{sensorData?.P || 'N/A'}</p>
+                    <Badge variant="outline" className="mt-1">
+                      {sensorData?.P > 80 ? 'Good' : sensorData?.P > 50 ? 'Moderate' : 'Low'}
+                    </Badge>
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-medium text-gray-600 mb-1">Potassium (K)</p>
-                    <p className="text-3xl font-bold text-blue-600">{sensorData.potassium}</p>
-                    <Badge variant="secondary" className="mt-1">Good</Badge>
+                    <p className="text-3xl font-bold text-blue-600">{sensorData?.K || 'N/A'}</p>
+                    <Badge variant="secondary" className="mt-1">
+                      {sensorData?.K > 80 ? 'Good' : sensorData?.K > 50 ? 'Moderate' : 'Low'}
+                    </Badge>
                   </div>
                 </div>
               </CardContent>
