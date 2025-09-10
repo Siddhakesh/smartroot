@@ -252,7 +252,7 @@ const Dashboard = () => {
                     <Thermometer className="h-5 w-5 text-orange-500" />
                     <div>
                       <p className="text-sm font-medium text-gray-600">Temperature</p>
-                      <p className="text-2xl font-bold">{sensorData.temperature}°C</p>
+                      <p className="text-2xl font-bold">{sensorData?.temperature || 'N/A'}°C</p>
                     </div>
                   </div>
                 </CardContent>
@@ -264,7 +264,7 @@ const Dashboard = () => {
                     <Droplets className="h-5 w-5 text-blue-500" />
                     <div>
                       <p className="text-sm font-medium text-gray-600">Humidity</p>
-                      <p className="text-2xl font-bold">{sensorData.humidity}%</p>
+                      <p className="text-2xl font-bold">{sensorData?.humidity || 'N/A'}%</p>
                     </div>
                   </div>
                 </CardContent>
@@ -276,7 +276,7 @@ const Dashboard = () => {
                     <Cloud className="h-5 w-5 text-gray-500" />
                     <div>
                       <p className="text-sm font-medium text-gray-600">pH Level</p>
-                      <p className="text-2xl font-bold">{sensorData.ph}</p>
+                      <p className="text-2xl font-bold">{sensorData?.ph || 'N/A'}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -288,7 +288,7 @@ const Dashboard = () => {
                     <Cloud className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="text-sm font-medium text-gray-600">Rainfall</p>
-                      <p className="text-2xl font-bold">{sensorData.rainfall}mm</p>
+                      <p className="text-2xl font-bold">{sensorData?.rainfall || 'N/A'}mm</p>
                     </div>
                   </div>
                 </CardContent>
