@@ -39,7 +39,7 @@ const Login = () => {
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Leaf className="h-8 w-8 text-green-600" />
-            <h1 className="text-2xl font-bold text-green-800">AgriBot</h1>
+            <h1 className="text-2xl font-bold text-green-800">SmartRoots</h1>
           </div>
           <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
           <CardDescription className="text-center">
