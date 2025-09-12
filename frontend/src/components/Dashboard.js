@@ -23,7 +23,15 @@ import {
   Loader2,
   Zap,
   Activity,
-  Target
+  Target,
+  Camera,
+  Upload,
+  Users,
+  Hash,
+  CheckCircle,
+  AlertTriangle,
+  Shield,
+  Image as ImageIcon
 } from 'lucide-react';
 import Logo3D from './Logo3D';
 
