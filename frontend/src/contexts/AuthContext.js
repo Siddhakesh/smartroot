@@ -14,10 +14,6 @@ export const useAuth = () => {
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Debug logging
-console.log('BACKEND_URL:', BACKEND_URL);
-console.log('API URL:', API);
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
