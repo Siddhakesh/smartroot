@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Optional
 
 # Configuration
-BASE_URL = "https://crophelper-3.preview.emergentagent.com/api"
+BASE_URL = "https://black-modern-app.preview.emergentagent.com/api"
 TEST_USER_EMAIL = "farmer.john@agribot.com"
 TEST_USER_PASSWORD = "SecurePass123!"
 TEST_USER_NAME = "John Farmer"

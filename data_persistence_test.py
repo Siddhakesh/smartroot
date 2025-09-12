@@ -7,7 +7,7 @@ import requests
 import json
 import time
 
-BASE_URL = "https://crophelper-3.preview.emergentagent.com/api"
+BASE_URL = "https://black-modern-app.preview.emergentagent.com/api"
 
 def test_sensor_data_drift():
     """Test that sensor data drifts between calls"""
