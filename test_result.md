@@ -141,11 +141,14 @@ backend:
     file: "server.py (agribot endpoints)"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "API endpoints for sensor data, crop recommendation, and data refresh implemented and working. Tested with frontend successfully."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Sensor data and crop recommendation APIs working perfectly. GET /api/agribot/sensor-data returns complete sensor data (N,P,K,temp,humidity,pH,rainfall) with recommended crop. POST /api/agribot/refresh-data successfully updates sensor readings."
 
   - task: "Weather API Integration"
     implemented: true
