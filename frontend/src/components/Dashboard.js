@@ -276,7 +276,7 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 lg:w-400 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-6 lg:w-600 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
             <TabsTrigger 
               value="dashboard" 
               className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 transition-all duration-300"
@@ -290,6 +290,20 @@ const Dashboard = () => {
             >
               <MessageCircle className="h-4 w-4 mr-2" />
               AI Chat
+            </TabsTrigger>
+            <TabsTrigger 
+              value="disease"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 transition-all duration-300"
+            >
+              <Target className="h-4 w-4 mr-2" />
+              Disease Detection
+            </TabsTrigger>
+            <TabsTrigger 
+              value="community"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white text-slate-400 transition-all duration-300"
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Community
             </TabsTrigger>
             <TabsTrigger 
               value="yield"
