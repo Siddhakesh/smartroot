@@ -72,16 +72,11 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password) => {
     try {
-      console.log('Attempting signup to:', `${API}/auth/signup`);
-      console.log('Signup data:', { name, email, password: '***' });
-      
       const response = await axios.post(`${API}/auth/signup`, {
         name,
         email,
         password
       });
-      
-      console.log('Signup response:', response.data);
       
       const { access_token, user: userData } = response.data;
       
@@ -93,7 +88,6 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Signup failed:', error);
-      console.error('Error response:', error.response);
       return { 
         success: false, 
         error: error.response?.data?.detail || error.message || 'Signup failed' 
