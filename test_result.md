@@ -186,11 +186,14 @@ backend:
     file: "server.py, ml_service.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: true
           agent: "main"
           comment: "Yield prediction API implemented with simulated farm data and ML model. Returns realistic yield predictions."
+        - working: true
+          agent: "testing"
+          comment: "✅ TESTED: Yield prediction API working correctly. GET /api/agribot/yield-prediction returns realistic yield predictions (853.06 tons) with complete farm data including area, crop type, and environmental factors."
 
   - task: "Market Recommendations API"
     implemented: true
